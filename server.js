@@ -28,25 +28,33 @@ app.post('/updaterole',roleService.updateRole); // update rolename
 app.post('/user',userService.addUser); // Add New User
 app.post('/user/login',userService.login); // Login User
 app.post('/user/update',middleware.requireAuthentication,userService.update); // Update user details
-app.delete('user/login',middleware.requireAuthentication,userService.logout); // logout
+app.delete('/user/login',middleware.requireAuthentication,userService.logout); // logout
 
 // All address Request
 app.post('/address',middleware.requireAuthentication,addressService.add);
 app.get('/address',middleware.requireAuthentication,addressService.allAddress);
 app.post('/address/id',middleware.requireAuthentication,addressService.getAddress);
 app.post('/updateAddress',middleware.requireAuthentication,addressService.updateAddress);
+app.delete('/deleteAddress',middleware.requireAuthentication,addressService.deleteAddress);
 
 // All Admin Request
 app.get('/showNewVendor',middleware.requireAuthentication,adminService.showNewVendor);
 
 
-// All Medicine Request
+// All Admin service 
+// only admin can approve store , and services will only called if admin is approved
+app.get('/checkAdmin',middleware.requireAuthentication,middleware.checkAdmin,storeService.checkadminservice);
+
+
+
 
 //app.post('/addNewMedicine',middleware.requireAuthentication,medicineService.addNewMedicine);
 
 
 //Add New Store 
 app.post('/addNewStore',middleware.requireAuthentication,storeService.addNewStore);
+app.post('/editStoreDetails',middleware.checkAdmin,storeService.editStoreDetails);
+
 
 
 // GET /todos?completed=false&q=work

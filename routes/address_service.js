@@ -96,7 +96,7 @@ var address = {
 	}).then(function(address) {
 		if (address) {
 			address.update(attributes).then(function(address) {
-                console.log(address);
+                
 				res.json(address.toJSON());
 			}, function(e) {
 				res.status(400).json(e);
@@ -107,7 +107,36 @@ var address = {
 	}, function() {
 		res.status(500).send();
 	});
+ },
+ deleteAddress:function(req,res){
+     var body = _.pick(req.body,'id');
+     
+     db.address.destroy({
+         where:{
+             id:body.id,
+             userId:req.user.get('id')
+         }
+     }).then(function(address){
+         if(!address){
+             res.send({
+                 "message":"no address with this is ",
+                 "status":404
+             }).toJSON();
+         }
+           res.send({
+           "message":"Address has been deleted"
+       }).toJSON();
+     },function(err){
+         res.status(401).send();
+         
+         
+     });
+     
+     
  }
+     
+     
+ 
     
 
     
